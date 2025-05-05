@@ -8,34 +8,35 @@ from datetime import datetime
 from core.base_crawler import BaseCrawler
 
 
-class LombardiaCrawler(BaseCrawler):
+class LiguriaCrawler(BaseCrawler):
     """
-    Crawler for Regione Lombardia grants.
+    Crawler for Regione Liguria grants.
     """
     
     def __init__(self, max_pages: int = 10, delay: float = 1.0):
         """
-        Initialize the Lombardia crawler.
+        Initialize the Liguria crawler.
         
         Args:
             max_pages (int): Maximum number of pages to crawl
             delay (float): Delay between requests in seconds
         """
         super().__init__(
-            base_url="https://www.bandi.regione.lombardia.it",
+            base_url="https://www.regione.liguria.it",
             max_pages=max_pages,
             delay=delay
         )
-        self.logger = logging.getLogger("LombardiaCrawler")
+        self.logger = logging.getLogger("LiguriaCrawler")
     
     def get_grant_listing_urls(self) -> List[str]:
         """
-        Get URLs for individual grant listings from Regione Lombardia.
+        Get URLs for individual grant listings from Regione Liguria.
         
         Returns:
             List[str]: List of URLs to individual grant pages
         """
-        grants_url = "/servizi/servizio/bandi"
+        # Liguria likely has a bandi or contributi page
+        grants_url = "/bandi-e-avvisi"  # Adjust based on actual site structure
         soup = self.get_page(grants_url)
         
         if not soup:
@@ -44,24 +45,21 @@ class LombardiaCrawler(BaseCrawler):
         
         grant_urls = []
         
-        # Find all grant cards in the bandi list
-        grant_cards = soup.select(".card.card-bg.card-big")
+        # Find grant links - adjust selector based on site structure
+        grant_items = soup.select(".card-bando")  # Adjust based on actual site structure
         
-        for card in grant_cards:
-            # Look for "Scopri di più" link
-            scopri_links = [a for a in card.find_all('a') if 'Scopri' in a.text]
-            if scopri_links and scopri_links[0].has_attr("href"):
-                grant_url = scopri_links[0]["href"]
+        for item in grant_items:
+            link = item.select_one("a.card-link")  # Adjust selector
+            if link and link.has_attr("href"):
+                grant_url = link["href"]
                 full_url = urljoin(self.base_url, grant_url)
                 grant_urls.append(full_url)
         
-        # Handle pagination if needed
+        # Handle pagination if present
         pagination = soup.select_one(".pagination")
         if pagination:
-            # Find all page links
             page_links = pagination.select("a.page-link:not(.next):not(.prev)")
             
-            # Process additional pages (up to max_pages)
             pages_processed = 1
             for page_link in page_links[:min(len(page_links), self.max_pages - 1)]:
                 if pages_processed >= self.max_pages:
@@ -90,14 +88,13 @@ class LombardiaCrawler(BaseCrawler):
         """
         urls = []
         
-        # Find all grant cards
-        grant_cards = soup.select(".card.card-bg.card-big")
+        # Find grant links - adjust selector based on site structure
+        grant_items = soup.select(".card-bando")  # Adjust selector
         
-        for card in grant_cards:
-            # Look for "Scopri di più" link
-            scopri_links = [a for a in card.find_all('a') if 'Scopri' in a.text]
-            if scopri_links and scopri_links[0].has_attr("href"):
-                grant_url = scopri_links[0]["href"]
+        for item in grant_items:
+            link = item.select_one("a.card-link")  # Adjust selector
+            if link and link.has_attr("href"):
+                grant_url = link["href"]
                 full_url = urljoin(self.base_url, grant_url)
                 urls.append(full_url)
         
@@ -105,7 +102,7 @@ class LombardiaCrawler(BaseCrawler):
     
     def parse_grant_details(self, url: str) -> Dict[str, Any]:
         """
-        Parse the details of a grant from Regione Lombardia.
+        Parse the details of a grant from Regione Liguria.
         
         Args:
             url (str): URL of the grant detail page
@@ -123,51 +120,24 @@ class LombardiaCrawler(BaseCrawler):
             "Link Bando": url,
             "Link al sito del bando": url,
             "Emanazione": "Regionale",
-            "Località_MR": "Lombardia",
+            "Località_MR": "Liguria",
             "Data creazione": datetime.now().strftime("%Y-%m-%d")
         }
         
-        # Extract grant title (Nome del bando)
-        title_element = soup.select_one("h1")
+        # Extract grant title
+        title_element = soup.select_one("h1.titolo-bando")  # Adjust selector
         if title_element:
             grant_data["Nome del bando"] = title_element.text.strip()
         
-        # Extract grant code for reference
-        code_element = soup.select_one("span.codice")
-        grant_code = None
-        if code_element:
-            code_text = code_element.text.strip()
-            if 'Codice:' in code_text:
-                grant_code = code_text.replace('Codice:', '').strip()
-        
-        # Extract short description (Descrizione breve)
-        # First try to find a lead paragraph
-        desc_element = soup.select_one(".lead")
+        # Extract short description
+        desc_element = soup.select_one(".descrizione-breve")  # Adjust selector
         if desc_element:
             grant_data["Descrizione breve (Plain text)"] = desc_element.text.strip()
         
-        # Extract full description from the informative section
-        info_section = soup.select_one(".scheda-informativa")
-        if info_section:
-            # Try to find "Di cosa si tratta" section
-            di_cosa_heading = None
-            for h3 in info_section.select("h3"):
-                if "Di cosa si tratta" in h3.text:
-                    di_cosa_heading = h3
-                    break
-            
-            if di_cosa_heading:
-                # Get the next dd element which contains the description
-                desc_dd = di_cosa_heading.find_next("dd")
-                if desc_dd:
-                    grant_data["Descrizione del bando"] = desc_dd.text.strip()
-                    # If we don't have a short description yet, use this as well
-                    if "Descrizione breve (Plain text)" not in grant_data:
-                        # Truncate for short description
-                        short_desc = desc_dd.text.strip()
-                        if len(short_desc) > 300:
-                            short_desc = short_desc[:297] + "..."
-                        grant_data["Descrizione breve (Plain text)"] = short_desc
+        # Extract full description
+        full_desc_element = soup.select_one(".contenuto-bando")  # Adjust selector
+        if full_desc_element:
+            grant_data["Descrizione del bando"] = full_desc_element.text.strip()
         
         # If we still don't have a description, use the title as a fallback
         if "Descrizione breve (Plain text)" not in grant_data and "Nome del bando" in grant_data:
@@ -176,10 +146,10 @@ class LombardiaCrawler(BaseCrawler):
         if "Descrizione del bando" not in grant_data and "Descrizione breve (Plain text)" in grant_data:
             grant_data["Descrizione del bando"] = grant_data["Descrizione breve (Plain text)"]
         
-        # Extract deadlines from the header section
-        deadline_element = soup.select_one("span:-soup-contains('Scade il:')")
-        if deadline_element and deadline_element.next_sibling:
-            deadline_text = deadline_element.next_sibling.strip()
+        # Extract deadlines
+        deadline_element = soup.select_one(".data-scadenza")  # Adjust selector
+        if deadline_element:
+            deadline_text = deadline_element.text.strip()
             grant_data["Scadenza"] = deadline_text
             
             # Try to parse the date for internal deadline
@@ -191,32 +161,49 @@ class LombardiaCrawler(BaseCrawler):
             except:
                 self.logger.warning(f"Could not parse deadline date: {deadline_text}")
         
-        # Try to extract opening date (Data di apertura)
-        opening_date_element = soup.select_one("span:-soup-contains('Domande dal:')")
-        if opening_date_element and opening_date_element.next_sibling:
-            opening_date_text = opening_date_element.next_sibling.strip()
+        # Extract opening date
+        opening_date_element = soup.select_one(".data-apertura")  # Adjust selector
+        if opening_date_element:
+            opening_date_text = opening_date_element.text.strip()
             grant_data["Data di apertura"] = opening_date_text
         
-        # Extract additional information from the "Scheda informativa" section
-        if info_section:
-            sections = info_section.select("h3")
-            
-            for section in sections:
-                section_title = section.text.strip()
-                next_dd = section.find_next("dd")
-                
-                if next_dd:
-                    text = next_dd.text.strip()
-                    
-                    if section_title == "Chi può partecipare":
-                        grant_data["A chi si rivolge"] = text
-                    elif section_title == "Come partecipare":
-                        grant_data["Iter presentazione della domanda"] = text
-                    elif section_title == "Procedura di selezione":
-                        grant_data["Tipo"] = text
+        # Extract eligible applicants
+        eligible_element = soup.select_one(".destinatari")  # Adjust selector
+        if eligible_element:
+            grant_data["A chi si rivolge"] = eligible_element.text.strip()
         
-        # Extract attachments (if any)
-        attachments_section = soup.select_one(".allegati")
+        # Extract application procedure
+        procedure_element = soup.select_one(".modalita-presentazione")  # Adjust selector
+        if procedure_element:
+            grant_data["Iter presentazione della domanda"] = procedure_element.text.strip()
+        
+        # Extract grant type
+        type_element = soup.select_one(".tipo-bando")  # Adjust selector
+        if type_element:
+            type_text = type_element.text.strip()
+            grant_data["Tipo"] = self._map_grant_type(type_text)
+        
+        # Extract funding amount
+        funding_element = soup.select_one(".dotazione-finanziaria")  # Adjust selector
+        if funding_element:
+            funding_text = funding_element.text.strip()
+            # Try to extract numeric value
+            amount_match = re.search(r'(\d[\d\.,]+)', funding_text)
+            if amount_match:
+                try:
+                    # Remove commas and other non-numeric chars except decimal point
+                    amount_str = re.sub(r'[^\d.]', '', amount_match.group(1).replace(',', '.'))
+                    grant_data["Dotazione"] = float(amount_str)
+                except:
+                    self.logger.warning(f"Could not parse funding amount: {funding_text}")
+        
+        # Extract eligible expenses
+        expenses_element = soup.select_one(".spese-ammissibili")  # Adjust selector
+        if expenses_element:
+            grant_data["Spese ammissibili"] = expenses_element.text.strip()
+        
+        # Extract attachments
+        attachments_section = soup.select_one(".documenti-allegati")  # Adjust selector
         if attachments_section:
             attachments = self._extract_attachments(attachments_section)
             if attachments:
@@ -225,13 +212,34 @@ class LombardiaCrawler(BaseCrawler):
                 if attachments.get("informativi"):
                     grant_data["Allegato informativo - X"] = ", ".join(attachments["informativi"])
         
-        # Extract document requirements using improved document detection
+        # Extract document requirements
         full_text = self._get_full_grant_text(soup)
         doc_requirements, doc_contexts = self._extract_document_requirements(full_text)
         if doc_requirements:
             grant_data["Documentazione necessaria"] = "\n".join(f"- {doc}" for doc in doc_requirements)
         
         return grant_data
+    
+    def _map_grant_type(self, type_text: str) -> str:
+        """
+        Map the raw grant type text to standardized categories.
+        
+        Args:
+            type_text (str): Raw grant type text
+            
+        Returns:
+            str: Standardized grant type
+        """
+        type_text = type_text.lower()
+        
+        if any(keyword in type_text for keyword in ["sportello", "a sportello"]):
+            return "Procedura a sportello"
+        elif any(keyword in type_text for keyword in ["esaurimento", "fondi", "fino esaurimento"]):
+            return "Esaurimento fondi"
+        elif any(keyword in type_text for keyword in ["click", "clickday", "click day"]):
+            return "Clickday"
+        else:
+            return "Data di chiusura"  # Default type
     
     def _extract_attachments(self, attachments_section: BeautifulSoup) -> Dict[str, List[str]]:
         """
@@ -283,25 +291,44 @@ class LombardiaCrawler(BaseCrawler):
         text_parts = []
         
         # Get title
-        title = soup.select_one("h1")
+        title = soup.select_one("h1.titolo-bando")  # Adjust selector
         if title:
             text_parts.append(title.text.strip())
         
-        # Get description
-        desc = soup.select_one(".lead")
+        # Get short description
+        desc = soup.select_one(".descrizione-breve")  # Adjust selector
         if desc:
             text_parts.append(desc.text.strip())
         
-        # Get all content from informative section
-        info_section = soup.select_one(".scheda-informativa")
-        if info_section:
-            for dd in info_section.select("dd"):
-                text_parts.append(dd.text.strip())
+        # Get full content
+        content = soup.select_one(".contenuto-bando")  # Adjust selector
+        if content:
+            text_parts.append(content.text.strip())
         
-        # Get all content from attachment section
-        attachments = soup.select_one(".allegati")
+        # Get eligible applicants
+        eligible = soup.select_one(".destinatari")  # Adjust selector
+        if eligible:
+            text_parts.append(eligible.text.strip())
+        
+        # Get application procedure
+        procedure = soup.select_one(".modalita-presentazione")  # Adjust selector
+        if procedure:
+            text_parts.append(procedure.text.strip())
+        
+        # Get eligible expenses
+        expenses = soup.select_one(".spese-ammissibili")  # Adjust selector
+        if expenses:
+            text_parts.append(expenses.text.strip())
+        
+        # Get attachments section
+        attachments = soup.select_one(".documenti-allegati")  # Adjust selector
         if attachments:
             text_parts.append(attachments.text.strip())
+        
+        # Get any additional sections
+        additional_sections = soup.select(".sezione-bando")  # Adjust selector
+        for section in additional_sections:
+            text_parts.append(section.text.strip())
         
         return "\n\n".join(text_parts)
     

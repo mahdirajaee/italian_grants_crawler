@@ -119,3 +119,31 @@
 2025-05-05 09:35:38 - root - ERROR - Could not import crawler for national.mimit: No module named 'crawlers.national.mimit_crawler'
 2025-05-05 09:35:38 - crawl_site.national.mimit - ERROR - No crawler implementation found for national.mimit
 2025-05-05 09:35:38 - main - INFO - Exported 6 grants to /Users/mehdi/Desktop/BandoEasy/1 - BackEnd - OnGoing /May 2025/live update 4.0/italian_grants_crawler/output/grants_20250505_093520.csv
+2025-05-05 10:58:58 - main - INFO - Preparing to crawl 24 sites
+2025-05-05 10:58:58 - root - ERROR - Could not import crawler for regional.vda: No module named 'crawlers.regional.vda_crawler'
+2025-05-05 10:58:58 - crawl_site.regional.vda - ERROR - No crawler implementation found for regional.vda
+2025-05-05 10:58:58 - crawl_site.regional.piemonte - INFO - Starting to crawl Piemonte (https://bandi.regione.piemonte.it)
+2025-05-05 10:58:58 - PiemonteCrawler - INFO - Starting to crawl https://bandi.regione.piemonte.it
+2025-05-05 10:58:58 - PiemonteCrawler - INFO - Fetching page: https://bandi.regione.piemonte.it/finanziamenti
+2025-05-05 10:59:01 - PiemonteCrawler - ERROR - Error fetching page https://bandi.regione.piemonte.it/finanziamenti: 404 Client Error: Not Found for url: https://bandi.regione.piemonte.it/finanziamenti
+2025-05-05 10:59:01 - PiemonteCrawler - ERROR - Failed to fetch grants list page
+2025-05-05 10:59:01 - PiemonteCrawler - INFO - Found 0 grant listings
+2025-05-05 10:59:01 - PiemonteCrawler - INFO - Successfully crawled 0 grants
+2025-05-05 10:59:01 - crawl_site.regional.piemonte - INFO - Finished crawling Piemonte: 0 grants found
+2025-05-05 10:59:01 - crawl_site.regional.lombardia - INFO - Starting to crawl Lombardia (https://www.bandi.regione.lombardia.it)
+2025-05-05 10:59:01 - LombardiaCrawler - INFO - Starting to crawl https://www.bandi.regione.lombardia.it
+2025-05-05 10:59:01 - LombardiaCrawler - INFO - Fetching page: https://www.bandi.regione.lombardia.it/servizi/servizio/bandi
+2025-05-05 10:59:02 - LombardiaCrawler - INFO - Fetching page: https://www.bandi.regione.lombardia.it
+2025-05-05 10:59:03 - LombardiaCrawler - INFO - Fetching page: https://www.bandi.regione.lombardia.it
+2025-05-05 10:59:04 - LombardiaCrawler - INFO - Fetching page: https://www.bandi.regione.lombardia.it
+2025-05-05 10:59:05 - LombardiaCrawler - INFO - Fetching page: https://www.bandi.regione.lombardia.it
+2025-05-05 10:59:06 - LombardiaCrawler - INFO - Fetching page: https://www.bandi.regione.lombardia.it
+2025-05-05 10:59:07 - LombardiaCrawler - INFO - Fetching page: https://www.bandi.regione.lombardia.it
+2025-05-05 10:59:08 - LombardiaCrawler - INFO - Fetching page: https://www.bandi.regione.lombardia.it
+2025-05-05 10:59:09 - LombardiaCrawler - INFO - Fetching page: https://www.bandi.regione.lombardia.it
+2025-05-05 10:59:10 - LombardiaCrawler - INFO - Fetching page: https://www.bandi.regione.lombardia.it
+2025-05-05 10:59:11 - LombardiaCrawler - INFO - Found 6 grant listings
+2025-05-05 10:59:11 - LombardiaCrawler - INFO - Fetching page: https://www.bandi.regione.lombardia.it/servizi/servizio/bandi/dettaglio/agricoltura-pesca/agricoltura/sostegno-servizi-sostituzione-agricoltura-contributo-2026-attivit-2025-RLM12025045763
+2025-05-05 10:59:12 - LombardiaCrawler - INFO - Fetching page: https://www.bandi.regione.lombardia.it/servizi/servizio/bandi/dettaglio/istruzione-formazione-lavoro/diritto-dovere-istruzione/attivit-integrative-comunitarie-aic-pr-fse-2021-27-RLW12025044423
+2025-05-05 10:59:14 - LombardiaCrawler - INFO - Fetching page: https://www.bandi.regione.lombardia.it/servizi/servizio/bandi/dettaglio/istruzione-formazione-lavoro/lavoro-occupazione/avviso-pubblico-verso-certificazione-parit-genere-annualit-2025-2027-UCL012025044225
+2025-05-05 10:59:15 - LombardiaCrawler - INFO - Fetching page: https://www.bandi.regione.lombardia.it/servizi/servizio/bandi/dettaglio/istruzione-formazione-lavoro/diritto-dovere-istruzione/iefp-iii-anno-2023-24-RLW12023031868

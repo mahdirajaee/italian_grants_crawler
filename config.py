@@ -35,7 +35,6 @@ REGIONAL_SITES = {
             "list_items": ".views-row",
             "link": "a",
             "title": "h2",
-            # Add specific selectors for grant details based on site structure
         }
     },
     "piemonte": {
@@ -68,7 +67,166 @@ REGIONAL_SITES = {
             "title": "h3",
         }
     },
-    # Add other regions here
+    "liguria": {
+        "name": "Liguria",
+        "base_url": "https://www.regione.liguria.it",
+        "grants_url": "/it/bandi-e-avvisi",
+        "selectors": {
+            "list_items": ".card-wrapper",
+            "link": "a",
+            "title": "h3",
+        }
+    },
+    "emilia_romagna": {
+        "name": "Emilia Romagna",
+        "base_url": "https://bandi.regione.emilia-romagna.it",
+        "grants_url": "/it/ricerca-bandi",
+        "selectors": {
+            "list_items": ".item",
+            "link": "a",
+            "title": "h3",
+        }
+    },
+    "trentino_alto_adige": {
+        "name": "Trentino Alto Adige",
+        "base_url": "https://www.regione.taa.it",
+        "grants_url": "/it/bandi",
+        "selectors": {
+            "list_items": ".article",
+            "link": "a",
+            "title": "h2",
+        }
+    },
+    "friuli_venezia_giulia": {
+        "name": "Friuli Venezia Giulia",
+        "base_url": "https://www.regione.fvg.it",
+        "grants_url": "/it/web/guest/contributi-avvisi-bandi-gare",
+        "selectors": {
+            "list_items": ".card",
+            "link": "a",
+            "title": "h3",
+        }
+    },
+    "toscana": {
+        "name": "Toscana",
+        "base_url": "https://www.regione.toscana.it",
+        "grants_url": "/-/bandi-e-avvisi-attivi",
+        "selectors": {
+            "list_items": ".list-item",
+            "link": "a",
+            "title": "h3",
+        }
+    },
+    "umbria": {
+        "name": "Umbria",
+        "base_url": "https://www.regione.umbria.it",
+        "grants_url": "/it/bandi",
+        "selectors": {
+            "list_items": ".item",
+            "link": "a",
+            "title": "h3",
+        }
+    },
+    "marche": {
+        "name": "Marche",
+        "base_url": "https://www.regione.marche.it",
+        "grants_url": "/regione-utile/opportunita-sviluppo/bandi-di-finanziamento",
+        "selectors": {
+            "list_items": ".content-item",
+            "link": "a",
+            "title": "h3",
+        }
+    },
+    "lazio": {
+        "name": "Lazio",
+        "base_url": "https://www.regione.lazio.it",
+        "grants_url": "/web/guest/bandi-e-avvisi",
+        "selectors": {
+            "list_items": ".card",
+            "link": "a",
+            "title": "h3",
+        }
+    },
+    "abruzzo": {
+        "name": "Abruzzo",
+        "base_url": "https://www.regione.abruzzo.it",
+        "grants_url": "/content/bandi-aperti",
+        "selectors": {
+            "list_items": ".view-content .views-row",
+            "link": "a",
+            "title": "h2",
+        }
+    },
+    "molise": {
+        "name": "Molise",
+        "base_url": "https://www3.regione.molise.it",
+        "grants_url": "/flex/cm/pages/ServeBLOB.php/L/IT/IDPagina/16881",
+        "selectors": {
+            "list_items": ".elenco_allegati",
+            "link": "a",
+            "title": "span",
+        }
+    },
+    "campania": {
+        "name": "Campania",
+        "base_url": "https://www.regione.campania.it",
+        "grants_url": "/tematiche/attivita-economiche/bandi",
+        "selectors": {
+            "list_items": ".item",
+            "link": "a",
+            "title": "h4",
+        }
+    },
+    "puglia": {
+        "name": "Puglia",
+        "base_url": "https://www.regione.puglia.it",
+        "grants_url": "/web/guest/bandi-e-avvisi",
+        "selectors": {
+            "list_items": ".item",
+            "link": "a",
+            "title": "h2",
+        }
+    },
+    "basilicata": {
+        "name": "Basilicata",
+        "base_url": "https://www.regione.basilicata.it",
+        "grants_url": "/giunta/site/giunta/department.jsp?dep=100435&area=3052459",
+        "selectors": {
+            "list_items": ".list-item",
+            "link": "a",
+            "title": "h3",
+        }
+    },
+    "calabria": {
+        "name": "Calabria",
+        "base_url": "https://www.regione.calabria.it",
+        "grants_url": "/bandi",
+        "selectors": {
+            "list_items": ".list-item",
+            "link": "a",
+            "title": "h3",
+        }
+    },
+    "sicilia": {
+        "name": "Sicilia",
+        "base_url": "https://www.regione.sicilia.it",
+        "grants_url": "/istituzioni/regione/strutture-regionali/presidenza/dipartimento-della-programmazione/bandi-e-avvisi",
+        "selectors": {
+            "list_items": ".list-item",
+            "link": "a",
+            "title": "h3",
+        }
+    },
+    "sardegna": {
+        "name": "Sardegna",
+        "base_url": "https://www.regione.sardegna.it",
+        "grants_url": "/it/bandi-e-gare",
+        "selectors": {
+            "list_items": ".article",
+            "link": "a",
+            "title": "h3",
+        }
+    }
 }
 
 COMMERCE_SITES = {

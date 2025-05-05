@@ -14,7 +14,27 @@ from core.exporter import CSVExporter
 
 # Import crawlers
 from crawlers.regional.lombardia_crawler import LombardiaCrawler
-# Import other crawlers as you implement them
+from crawlers.regional.piemonte_crawler import PiemonteCrawler
+from crawlers.regional.FriuliVeneziaGiulia_Crawler import FriuliVeneziaGiuliaCrawler
+from crawlers.regional.Veneto_crawler import VenetoCrawler
+from crawlers.regional.Trentino_crawler import TrentinoCrawler
+from crawlers.regional.ValleDAosta_crawler import ValleDAostaCrawler
+from crawlers.regional.Lazio_crawler import LazioCrawler
+from crawlers.regional.Toscana_crawler import ToscanaCrawler
+from crawlers.regional.Umbria_crawler import UmbriaCrawler
+from crawlers.regional.Molise_crawler import MoliseCrawler
+from crawlers.regional.Calabria_crawler import CalabriaCrawler
+from crawlers.regional.Sicilia_crawler import SiciliaCrawler
+from crawlers.regional.Puglia_crawler import PugliaCrawler
+from crawlers.regional.Abruzzo_Crawler import AbruzzoCrawler
+from crawlers.regional.Basilicata_crawler import BasilicataCrawler
+from crawlers.regional.Marche_crawler import MarcheCrawler
+from crawlers.regional.Liguria_crawler import LiguriaCrawler
+from crawlers.regional.EmiliaRomagna_crawler import EmiliaRomagnaCrawler
+
+# Import other crawlers as needed
+# Note: The dynamic import in get_crawler_class will find the other regional crawlers
+# when they are implemented
 
 
 def setup_logging():
